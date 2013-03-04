@@ -22,6 +22,7 @@
   BOOL alreadyPrintedData;
   BOOL retinaDevice;
   BOOL tallDevice;
+  int timeout;
 }
 
 - (void)runWithArgc:(int)argc argv:(char **)argv;

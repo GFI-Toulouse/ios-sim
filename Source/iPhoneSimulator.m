@@ -49,6 +49,7 @@ NSString *deviceIpadRetina = @"iPad (Retina)";
   fprintf(stderr, "  --stdout <stdout file path>     The path where stdout of the simulator will be redirected to (defaults to stdout of ios-sim)\n");
   fprintf(stderr, "  --stderr <stderr file path>     The path where stderr of the simulator will be redirected to (defaults to stderr of ios-sim)\n");
   fprintf(stderr, "  --args <...>                    All following arguments will be passed on to the application\n");
+  fprintf(stderr, "  --timeout <...>                 The timeout in seconds to wait until to kill ios-sim then it starts (30s if not defined)\n");
 }
 
 
@@ -248,7 +249,7 @@ NSString *deviceIpadRetina = @"iPad (Retina)";
     [session setUuid:uuid];
   }
 
-  if (![session requestStartWithConfig:config timeout:30 error:&error]) {
+  if (![session requestStartWithConfig:config timeout:timeout error:&error]) {
     nsprintf(@"Could not start simulator session: %@", error);
     return EXIT_FAILURE;
   }
@@ -297,6 +298,7 @@ NSString *deviceIpadRetina = @"iPad (Retina)";
   tallDevice = NO;
   exitOnStartup = NO;
   alreadyPrintedData = NO;
+  timeout = 30;
   startOnly = strcmp(argv[1], "start") == 0;
 
   if (strcmp(argv[1], "showsdks") == 0) {
@@ -360,6 +362,9 @@ NSString *deviceIpadRetina = @"iPad (Retina)";
       } else if (strcmp(argv[i], "--family") == 0) {
         i++;
         family = [NSString stringWithUTF8String:argv[i]];
+      } else if (strcmp(argv[i], "--timeout") == 0) {
+          i++;
+          timeout = [[NSString stringWithUTF8String:argv[i]] intValue];
       } else if (strcmp(argv[i], "--uuid") == 0) {
         i++;
         uuid = [NSString stringWithUTF8String:argv[i]];
